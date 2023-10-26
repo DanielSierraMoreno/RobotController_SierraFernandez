@@ -61,13 +61,10 @@ namespace RobotController
         }
         public MyQuat Conjugate()
         {
-            MyQuat inverse;
-            inverse.w = w;
-            inverse.x = -x;
-            inverse.y = -y;
-            inverse.z = -z;
-
-            return inverse;
+            x = -x;
+            y = -y;
+            z = -z;
+            return this;
         }
 
         public static MyQuat Cross(MyQuat a, MyQuat b)
@@ -147,7 +144,6 @@ namespace RobotController
 
         private static MyQuat twist;
         private static MyQuat swing;
-        private static MyQuat _rot2;
 
         #region public methods
 
@@ -255,9 +251,8 @@ namespace RobotController
                 rot0 = Rotate(rot0, new MyVec(0f, 1f, 0f), (41 - 74) * lerpValue + 74);
                 rot1 = Rotate(rot0, new MyVec(1, 0, 0), (6 + 7) * lerpValue - 7);
                 rot2 = Rotate(rot1, new MyVec(1, 0, 0), (65 - 76) * lerpValue + 76);
-                _rot2 = rot2;
-                swing = Rotate(rot2, new MyVec(1f, 0f, 0f), (32 - 40) * lerpValue + 40);
-                twist = Rotate(swing, new MyVec(0f, 1f, 0f), (0 - 90) * lerpValue);
+                swing = Rotate(rot2, new MyVec(1f, 0f, 0f), (20 - 40) * lerpValue + 40);
+                twist = Rotate(swing, new MyVec(0f, 1f, 0f), (0 - 90) * lerpValue + 0);
                 rot3 = twist * swing;
                 return true;
             }
@@ -275,13 +270,11 @@ namespace RobotController
 
         public static MyQuat GetSwing(MyQuat rot3)
         {
-
             return MyQuat.Normalize(twist.Inverse() * rot3);
         }
         public static MyQuat GetTwist(MyQuat rot3)
         {
-            return MyQuat.Normalize( rot3 * swing.Inverse());
-
+            return MyQuat.Normalize(swing.Inverse() * rot3);
 
         }
         #endregion
