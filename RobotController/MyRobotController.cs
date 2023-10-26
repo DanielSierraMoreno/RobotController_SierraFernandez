@@ -176,24 +176,40 @@ namespace RobotController
 
         public bool PickStudAnim(out MyQuat rot0, out MyQuat rot1, out MyQuat rot2, out MyQuat rot3)
         {
-            bool myCondition = false;
-            //todo: add a check for your condition
 
-
-
-            if (myCondition)
+            if (!canPlayExercice2)
             {
-                //todo: add your code here
                 rot0 = NullQ;
                 rot1 = NullQ;
                 rot2 = NullQ;
                 rot3 = NullQ;
+                return false;
+            }
 
+            float animationDuration = 1000;
+            if (startTimeAnimation1 <= 0)
+            {
+                startTimeAnimation1 = TimeSinceMidnight;
+            }
+
+
+            float lerpValue = (TimeSinceMidnight - startTimeAnimation1) / animationDuration;
+
+            if (lerpValue < 1)
+            {
+                //todo: add your code here
+                rot0 = NullQ;
+                rot0 = Rotate(rot0, new MyVec(0f, 1f, 0f), (41 - 74) * lerpValue + 74);
+                rot1 = Rotate(rot0, new MyVec(1, 0, 0), (6 + 7) * lerpValue - 7);
+                rot2 = Rotate(rot1, new MyVec(1, 0, 0), (65 - 76) * lerpValue + 76);
+                rot3 = Rotate(rot2, new MyVec(1, 0, 0), (30 - 32) * lerpValue + 32);
 
                 return true;
             }
 
-            //todo: remove this once your code works.
+            startTimeAnimation1 = 0;
+            canPlayExercice2 = false;
+            canPlayExercice3 = true;
             rot0 = NullQ;
             rot1 = NullQ;
             rot2 = NullQ;
